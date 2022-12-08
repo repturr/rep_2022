@@ -178,7 +178,7 @@ local function AutoRoll()
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
     
-            if Roka and Arrow then
+            if Roka or Arrow then
                 UsingVariable = true;
                 UnequipAll();
                 Use(Roka);
