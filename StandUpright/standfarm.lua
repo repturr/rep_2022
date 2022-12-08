@@ -150,3 +150,6 @@ local StartupFunction, StartupReturnedData = pcall(function()
     return false;
 end);
 
+if StartupReturnedData == true then
+    CreateMessage("SUR Stand Farm: Script Ready");
+end
