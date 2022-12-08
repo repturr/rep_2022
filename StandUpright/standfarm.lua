@@ -172,6 +172,7 @@ local function AutoRoll()
             local Arrow = GetTool(ArrowType);
     
             if Roka and Arrow then
+                UsingVariable = true;
                 Use(Roka);
                 task.wait(2);
                 Use(Arrow);
