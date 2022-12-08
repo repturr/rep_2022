@@ -275,11 +275,11 @@ local function RunScript(Value)
                     Autobuy();
                     AutoRoll();
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
-                    Platform:Destroy();
+                    WebhookMessage("Got: " .. "**" .. StandData.Value .. "**" .. "/" .. "**" .. AttributeData.Value .. "**");
 
                     task.wait(.50);
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
+                    Platform:Destroy();
                     break;
                 end;
     
@@ -288,10 +288,10 @@ local function RunScript(Value)
                     AutoRoll();
                     CreateMessage("Got Stand: " .. StandData.Value);
                     WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
-                    Platform:Destroy();
-                    
+                  
                     task.wait(.50);
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
+                    Platform:Destroy();
                     break;
                 end;
             end
