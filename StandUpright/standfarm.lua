@@ -37,6 +37,7 @@ local AttributeData = Data.Attri
 local FunctionConnections = {
     AutoBuyActive = false;
     AutoRollActive = false;
+    AutoRollUsingItem = false;
 };
 local StartupConfirmed = false;
 
@@ -155,7 +156,6 @@ local function Autobuy()
 end;
 
 local function AutoRoll()
-    local UsingVariable = false;
     FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
 
         task.wait(1);
@@ -169,7 +169,7 @@ local function AutoRoll()
         end;
 
         while FunctionConnections.AutoRollActive == true do
-            if UsingVariable == true then
+            if FunctionConnections.AutoRollUsingItem == true then
                 return;
             end;
             task.wait(.25);
@@ -178,7 +178,7 @@ local function AutoRoll()
             local Arrow = GetTool(ArrowType);
     
             if Roka and Arrow then
-                UsingVariable = true;
+                FunctionConnections.AutoRollUsingItem  = true;
                 UnequipAll();
                 task.wait(.25);
                 Use(Roka);
@@ -186,7 +186,7 @@ local function AutoRoll()
                 Use(Arrow);
                 task.wait(1);
                 UnequipAll();
-                UsingVariable = false;
+                FunctionConnections.AutoRollUsingItem  = false;
             end;
         end;
     end;
