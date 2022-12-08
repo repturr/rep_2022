@@ -118,7 +118,6 @@ end;
 local function Autobuy()
     FunctionConnections.AutoBuyActive = not FunctionConnections.AutoBuyActive;
 
-    task.spawn(function()
         while FunctionConnections.AutoBuyActive == true do
             task.wait(BuyItemInterval);
             local OwnsArrows = false;
@@ -158,7 +157,6 @@ local function Autobuy()
                 end;
             end
         end;
-    end);
 end;
 
 local function AutoRoll()
@@ -269,14 +267,26 @@ local function RunScript(Value)
 		    VirtualUser:ClickButton2(Vector2.new())
 	    end)
 
-          Autobuy();
-          AutoRoll();
+        task.spawn(function()
+            Autobuy();
+        end)
+
+        task.spawn(function()
+            AutoRoll();
+        end)
+          
+          
 
           task.spawn(function()
             while task.wait() do
                 if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
-                    Autobuy();
-                    AutoRoll();
+                    task.spawn(function()
+                        Autobuy();
+                    end)
+            
+                    task.spawn(function()
+                        AutoRoll();
+                    end)
                     CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
                     WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
@@ -296,8 +306,13 @@ local function RunScript(Value)
           task.spawn(function()
             while task.wait() do
                 if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
-                    Autobuy();
-                    AutoRoll();
+                    task.spawn(function()
+                        Autobuy();
+                    end)
+            
+                    task.spawn(function()
+                        AutoRoll();
+                    end)
                     CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
                     WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
