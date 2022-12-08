@@ -107,13 +107,11 @@ function RollFunctions.EquipItem(Item)
     if not Item then
 		return;
 	end;
-	for _, __Item in pairs(Character:GetChildren()) do
-		if __Item:IsA("Tool") then
-			__Item.Parent = Backpack;
-		end;
-	end;
+	Item = Backpack:FindFirstChild(Item);
 
-	Item.Parent = Character;
+    if Item then
+        Item.Parent = Character;
+    end
 end
 
 function RollFunctions.UnequipAll()
@@ -235,6 +233,7 @@ coroutine.wrap(function()
     
     local Platform = Instance.new("Part", workspace);
     Platform.CFrame = Platform.CFrame * CFrame.new(0, -100, 0);
+    Platform.Size = Vector3.new(50, 50, 50)
     Platform.Anchored = true;
 
     Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
