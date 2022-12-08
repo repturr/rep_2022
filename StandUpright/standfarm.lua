@@ -86,6 +86,17 @@ local function CreateMessage(Message)
 	});
 end;
 
+local function Switch(value)
+    return function(cases)
+        local case = cases[value] or cases.default
+        if case then
+            return case(value)
+        else
+            error(string.format("Unhandled case (%s)", value), 2)
+        end
+    end
+end
+
 local function WebhookMessage(Message)
     if Webhook == "" then
         return;
@@ -131,10 +142,18 @@ local StartupSuccess, StartupData = xpcall(function()
     WebhookMessage("Webhook Attached");
 
     if Player and Character and Data then
-        return true;
+        return "Ready";
     end
 
-    return false;
+    return "NotReady";
 end)
 
+local __Script = Switch(StandData){
+    ["Ready"] = function()
+        CreateMessage("SUR Stand Farm: Script Ready");
+    end,
+    ["NotReady"] = function()
+        Player:Kick("Error");
+    end
+}
 
