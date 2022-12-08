@@ -129,8 +129,34 @@ function RollFunctions.UseItem(Item)
 end
 
 function RollFunctions.BuyItems()
-    BuyEvent:FireServer("MerchantAU", "Option4");
-    BuyEvent:FireServer("MerchantAU", "Option2");
+    local HasArrows = false;
+    local HasRokas = false;
+
+    for _, Item in pairs(Backpack:GetChildren()) do
+        if Item.Name == "Stand Arrow" then
+            HasArrows = true;
+        elseif Item.Name == "Rokakaka" then
+            HasRokas = true;
+        end
+    end
+
+    for _, Item in pairs(Character:GetChildren()) do
+        if Item:IsA("Tool") then
+        if Item.Name == "Stand Arrow" then
+            HasArrows = true;
+        elseif Item.Name == "Rokakaka" then
+            HasRokas = true;
+        end
+        end
+    end
+
+    if HasArrows == false then
+        BuyEvent:FireServer("MerchantAU", "Option4");
+    end
+
+    if HasArrows == false then
+        BuyEvent:FireServer("MerchantAU", "Option2");
+    end
 end
 
 function  RollFunctions.RollToggle()
