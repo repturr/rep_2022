@@ -197,7 +197,6 @@ function  RollFunctions.RollToggle()
             RollFunctions.BuyItems();
         end);
 
-        task.spawn(function()
             if (PlayerStand.Value ~= "None") then
                 return;
             end;
@@ -211,8 +210,8 @@ function  RollFunctions.RollToggle()
             RollFunctions.UseItem("Rokakaka");
             task.wait(1);
             RollFunctions.UnequipAll();
+            task.wait(2)
             RollFunctions.RollBusy = false;
-        end)
 
     end;
 end
