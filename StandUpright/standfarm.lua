@@ -144,18 +144,22 @@ local StartupResultData = task.spawn(function()
 	if Player and Character and Data then
 		return "Ready";
 	end
+
+    return "NotReady";
 end);
 
 local __Script = Switch(StartupResultData){
 	["Ready"] = function()
 		CreateMessage("SUR Stand Farm: Script Ready");
+        return true;
 	end,
 	["NotReady"] = function()
 		Player:Kick("Error");
+        return false;
 	end,
 
     ["Default"] = function()
-        
+        return false;
     end;
 }
 
