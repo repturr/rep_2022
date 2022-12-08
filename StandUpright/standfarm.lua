@@ -172,7 +172,7 @@ local function AutoRoll()
             if FunctionConnections.AutoRollUsingItem == true then
                 return;
             end;
-            task.wait(.25);
+            task.wait();
 
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
@@ -303,7 +303,11 @@ local function RunScript(Value)
                     Platform:Destroy();
                     break;
                 end;
-    
+            end
+          end)
+
+          task.spawn(function()
+            while task.wait() do
                 if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
                     Autobuy();
                     AutoRoll();
