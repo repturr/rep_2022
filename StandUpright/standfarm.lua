@@ -223,9 +223,11 @@ coroutine.wrap(function()
         end;
     end; -- Decrease Quality
 
-	repeat task.wait()
-        
-    until Player.PlayerGui.MainGUI.Enabled == false;
+	task.wait(7);
+    mousemoverel(0, 0);
+    SimulateLeftClick();
+
+
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
     ChatMessageInstance(Messages.CREDIT_MESSAGE);
     ChatMessageInstance(Messages.PLATFORM_TELEPORT_MESSAGE);
