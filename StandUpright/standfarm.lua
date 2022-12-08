@@ -188,8 +188,6 @@ function  RollFunctions.RollToggle()
 
                 break;
             end;
-
-            RollFunctions.UseItem("Rokakaka");
         end;
 
         task.spawn(function()
