@@ -180,10 +180,8 @@ local function AutoRoll()
     
             if Roka and Arrow then
                 UsingVariable = true;
-                UnequipAll();
                 Use(Roka);
                 task.wait(2);
-                UnequipAll();
                 Use(Arrow);
                 task.wait(1);
                 UsingVariable = false;
