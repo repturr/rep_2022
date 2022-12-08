@@ -81,7 +81,7 @@ end
 local function CreateMessage(Message)
 	StarterGui:SetCore("ChatMakeSystemMessage",{
 		['Text'] = Message,
-		['Color'] = Color3.fromRGB(66, 199, 0),
+		['Color'] = Color3.fromRGB(44, 180, 52),
 		['Font'] = Enum.Font.SourceSansLight
 	});
 end;
@@ -126,5 +126,15 @@ local function WebhookMessage(Message)
     })
 end
 
-CreateMessage("SUR Stand Farm: By Repturr")
-WebhookMessage("SUR Stand Farm: Webhook Attached");
+local StartupSuccess, StartupData = xpcall(function()
+    CreateMessage("SUR Stand Farm: By Repturr")
+    WebhookMessage("Webhook Attached");
+
+    if Player and Character and Data then
+        return true;
+    end
+
+    return false;
+end)
+
+
