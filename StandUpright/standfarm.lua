@@ -112,6 +112,8 @@ function RollFunctions.EquipItem(Item)
     if Item then
         Item.Parent = Character;
     end
+
+    return Item;
 end
 
 function RollFunctions.UnequipAll()
@@ -123,7 +125,7 @@ function RollFunctions.UnequipAll()
 end
 
 function RollFunctions.UseItem(Item)
-    RollFunctions.EquipItem(Item);
+    Item = RollFunctions.EquipItem(Item);
     Item:FindFirstChild("Use"):FireServer();
 end
 
