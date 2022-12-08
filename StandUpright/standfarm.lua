@@ -283,7 +283,9 @@ local function RunScript(Value)
             local UsingTool = ""
             FunctionConnections.AutoBuyActive = true;
             while FunctionConnections.AutoRollActive == true do
+                task.wait();
                 if (StandData.Value == "None") then
+                    print("None")
                     local _Arrow = GetTool(ArrowType);
 
                     if _Arrow then
