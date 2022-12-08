@@ -169,7 +169,6 @@ local function AutoRoll()
         end;
         UsingVariable = false;
 
-        task.spawn(function()
         while FunctionConnections.AutoRollActive == true do
             task.wait(.25);
             if UsingVariable == true then
@@ -179,7 +178,7 @@ local function AutoRoll()
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
     
-            if Roka or Arrow then
+            if Roka and Arrow then
                 UsingVariable = true;
                 UnequipAll();
                 Use(Roka);
@@ -190,7 +189,6 @@ local function AutoRoll()
                 UsingVariable = false;
             end;
         end;
-     end)
     end;
 end;
 
