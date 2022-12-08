@@ -237,6 +237,7 @@ local function RunScript(Value)
           end)
 
         task.spawn(function()
+            FunctionConnections.AutoBuyActive = true;
             while FunctionConnections.AutoBuyActive == true do
                 task.wait(BuyItemInterval);
                 local OwnsArrows = false;
@@ -280,7 +281,7 @@ local function RunScript(Value)
 
         task.spawn(function()
             local UsingTool = ""
-
+            FunctionConnections.AutoRollActive = true;
             while FunctionConnections.AutoRollActive == true do
                 if (StandData.Value == "None") then
                     local _Arrow = GetTool(ArrowType);
