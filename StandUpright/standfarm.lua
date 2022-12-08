@@ -169,10 +169,10 @@ local function AutoRoll()
         end;
 
         while FunctionConnections.AutoRollActive == true do
-            task.wait(.25);
             if UsingVariable == true then
                 return;
             end;
+            task.wait(.25);
 
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
