@@ -38,6 +38,7 @@ local FunctionConnections = {
     AutoBuyActive = false;
     AutoRollActive = false;
     AutoRollUsingItem = false;
+    AutoRollInUse = false;
 };
 local StartupConfirmed = false;
 
@@ -169,10 +170,12 @@ local function AutoRoll()
         end;
 
         while FunctionConnections.AutoRollActive == true do
-            if FunctionConnections.AutoRollUsingItem == true then
+            task.wait();
+            if FunctionConnections.AutoRollUsingItem == true or FunctionConnections.AutoRollInUse == true then
                 return;
             end;
-            task.wait();
+            FunctionConnections.AutoRollInUse = true;
+           
 
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
@@ -187,6 +190,7 @@ local function AutoRoll()
                 task.wait(1);
                 UnequipAll();
                 FunctionConnections.AutoRollUsingItem  = false;
+                FunctionConnections.AutoRollInUse = false;
             end;
         end;
     end;
