@@ -222,9 +222,12 @@ coroutine.wrap(function()
     end; -- Decrease Quality
 
 	task.wait(8);
-    for i,v in pairs(getconnections(Player.PlayerGui.MenuGUI.Play.MouseButton1Click)) do
-        v:Fire()
-     end
+    local events = {"MouseButton1Click", "MouseButton1Down", "Activated"}
+        for i,v in pairs(events) do
+            for i,v in pairs(getconnections(Player.PlayerGui.MenuGUI.Play[v])) do
+                v:Fire()
+        end
+    end
     task.wait(2);
 
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
