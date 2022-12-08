@@ -138,15 +138,16 @@ local function WebhookMessage(Message)
 end
 
 local Startup, StartupReturnedData = pcall(function()
-
-	CreateMessage("SUR Stand Farm: By Repturr")
+    task.spawn(function()
+    CreateMessage("SUR Stand Farm: By Repturr")
 	WebhookMessage("Webhook Attached");
-
+    end);
+	
 	if Player and Character and Data then
-		return "Ready";
+		return true;
 	end
 
-    return "NotReady";
+    return true;
 end);
 
 print(StartupReturnedData);
