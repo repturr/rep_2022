@@ -78,6 +78,12 @@ local function Buy(Item)
 end;
 
 local function Use(Item)
+    for _, Item in pairs(Character:GetChildren()) do
+        if Item:IsA("Tool") then
+            Item.Parent = Backpack;
+        end;
+    end;
+
 	EquipTool(Item);
 	Item:FindFirstChild("Use"):FireServer();
 end;
