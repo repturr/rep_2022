@@ -185,12 +185,12 @@ local function RunScript(Value)
             elseif not Roka then
                 Buy("Rokakaka");
                 task.wait(.15);
+                Roka = GetTool("Rokakaka");
 
                 Use(Roka);
             end
           end
 
-          
           
           local Platform = Instance.new("Part", workspace); 
           Platform.Size = Vector3.new(50, 50, 50);
