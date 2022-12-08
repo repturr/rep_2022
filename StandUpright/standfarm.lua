@@ -115,67 +115,7 @@ local function CreateNotification(Message, Duration)
     });
 end;
 
-local function Autobuy()
-    FunctionConnections.AutoBuyActive = not FunctionConnections.AutoBuyActive;
 
-        while FunctionConnections.AutoBuyActive == true do
-            task.wait(BuyItemInterval);
-            local OwnsArrows = false;
-            local OwnsRokas = false;
-
-            for _, Item in pairs(Backpack:GetChildren()) do
-                if Item:IsA("Tool") then
-                if Item.Name == "Rokakaka" then
-                    OwnsRokas = true;
-                end;
-
-                if Item.Name == "Stand Arrow" then
-                    OwnsArrows = true;
-                end;
-              end;
-            end;
-
-            for _, Item in pairs(Character:GetChildren()) do
-                if Item:IsA("Tool") then
-                    if Item.Name == "Rokakaka" then
-                        OwnsRokas = true
-                    end
-
-                    if Item.Name == "Stand Arrow" then
-                        OwnsArrows = true
-                    end;
-                end;
-            end;
-
-            if OwnsRokas == false then
-                Buy("Rokakaka");
-            end;
-
-            if OwnsArrows == false then
-                if ArrowType ~= "Charged Arrow" then
-                Buy("Stand Arrow");
-                end;
-            end
-        end;
-end;
-
-local function AutoRoll()
-    FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
-    
-    while FunctionConnections.AutoRollActive == true do
-        task.wait();
-
-        local Roka = GetTool("Rokakaka");
-        local Arrow = GetTool(ArrowType);
-
-        UnequipAll();
-
-        if Roka and Arrow then
-             Use(Roka);
-             Use(Arrow);
-        end
-    end
-end;
 
 
 local function WebhookMessage(Message, Color)
@@ -234,23 +174,8 @@ end);
 local function RunScript(Value)
     local Functions = {
         [true] = function()
-          local WarningNotification = CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
+          CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
           task.wait(10);
-          
-          task.spawn(function()
-            local Roka = GetTool("Rokakaka");
-
-            if Roka then
-                Use(Roka);
-            elseif not Roka then
-                Buy("Rokakaka");
-                task.wait(.25);
-                Roka = GetTool("Rokakaka");
-                Use(Roka);
-            end;
-          end)
-            
-
           
           local Platform = Instance.new("Part", workspace); 
           Platform.Size = Vector3.new(50, 50, 50);
@@ -263,70 +188,8 @@ local function RunScript(Value)
           Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
           CreateMessage("SUR Stand Farm: Starting Farm");
 
-          Player.Idled:Connect(function()
-		    local VirtualUser = game:GetService("VirtualUser")
-		    VirtualUser:CaptureController()
-		    VirtualUser:ClickButton2(Vector2.new())
-	    end)
-
-        task.spawn(function()
-            Autobuy();
-        end)
-
-        task.spawn(function()
-            AutoRoll();
-        end)
+        
           
-          
-
-          task.spawn(function()
-            while task.wait() do
-                if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
-                    task.spawn(function()
-                        Autobuy();
-                    end)
-            
-                    task.spawn(function()
-                        AutoRoll();
-                    end)
-                    CreateMessage("Got Stand: " .. StandData.Value);
-                    CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
-
-                    if Settings.KickUponRoll == true then
-                        Player:Kick("Requested Kick Upon Roll \n " .. StandData.Value .. "/" .. AttributeData.Value);
-                    end
-
-                    task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
-                    Platform:Destroy();
-                    break;
-                end;
-            end
-          end)
-
-          task.spawn(function()
-            while task.wait() do
-                if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
-                    task.spawn(function()
-                        Autobuy();
-                    end)
-            
-                    task.spawn(function()
-                        AutoRoll();
-                    end)
-                    CreateMessage("Got Stand: " .. StandData.Value);
-                    CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
-                  
-                    task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
-                    Platform:Destroy();
-                    break;
-                end;
-            end
-          end)
-
         end,
         [false] = function()
             
