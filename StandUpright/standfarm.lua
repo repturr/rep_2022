@@ -243,6 +243,8 @@ coroutine.wrap(function()
 
     Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
 
+    task.wait(1);
+    RollFunctions.RollToggle();
     
 
 
