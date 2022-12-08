@@ -276,6 +276,12 @@ local function RunScript(Value)
           Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
           CreateMessage("SUR Stand Farm: Starting Farm");
 
+          Player.Idled:Connect(function()
+            local VirtualUser = game:GetService("VirtualUser")
+            VirtualUser:CaptureController()
+            VirtualUser:ClickButton2(Vector2.new())
+        end)
+
           Autobuy();
           AutoRoll();
 
@@ -293,7 +299,6 @@ local function RunScript(Value)
                     end
 
                     task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
                     Platform:Destroy();
                     break;
                 end;
@@ -306,7 +311,6 @@ local function RunScript(Value)
                     WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
                   
                     task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
                     Platform:Destroy();
                     break;
                 end;
