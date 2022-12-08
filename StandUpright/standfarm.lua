@@ -139,31 +139,17 @@ end
 
 local Startup, StartupReturnedData = pcall(function()
     task.spawn(function()
-    CreateMessage("SUR Stand Farm: By Repturr")
-	WebhookMessage("Webhook Attached");
+        CreateMessage("SUR Stand Farm: By Repturr");
+	    WebhookMessage("Webhook Attached");
     end);
 	
 	if Player and Character and Data then
 		return true;
 	end
 
-    return true;
+    return false;
 end);
 
-print(StartupReturnedData);
-
---[[local __Script = Switch(StartupFunctionAndReturnResult){
-	["Ready"] = function()
-		CreateMessage("SUR Stand Farm: Script Ready");
-        return true;
-	end,
-	["NotReady"] = function()
-		Player:Kick("Error");
-        return false;
-	end,
-
-    ["Default"] = function()
-        return false;
-    end;
-}--]]
-
+if StartupReturnedData == true then
+    Player:Kick()
+end
