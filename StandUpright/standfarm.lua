@@ -98,7 +98,7 @@ end;
 
 local function WaitUntilItemIsUsed(Item, Callback)
     if CollectionService:HasTag(Item, "Using") then
-        repeat
+        repeat task.wait();
             
         until not Item.Parent;
         Callback();
