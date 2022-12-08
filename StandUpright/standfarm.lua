@@ -189,6 +189,7 @@ local function AutoRoll()
                 Use(Arrow);
                 task.wait(1);
                 UnequipAll();
+                task.wait(1);
                 FunctionConnections.AutoRollUsingItem  = false;
                 FunctionConnections.AutoRollInUse = false;
             end;
