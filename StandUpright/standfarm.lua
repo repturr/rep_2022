@@ -183,7 +183,7 @@ local function AutoRoll()
 end;
 
 
-local function WebhookMessage(Message)
+local function WebhookMessage(Message, Color)
 	if Webhook == "" then
 		return;
 	end;
@@ -200,7 +200,7 @@ local function WebhookMessage(Message)
 				["title"] = "**SUR Stand Farm**",
 				["description"] = "",
 				["type"] = "rich",
-				["color"] = tonumber(0xffffff),
+				["color"] = Color,
 				["fields"] = {
 					{
 						["name"] = "Client",
@@ -226,7 +226,7 @@ end
 local StartupCall, StartupReturnedData = pcall(function()
     task.spawn(function()
         CreateMessage("SUR Stand Farm: By Repturr");
-	    WebhookMessage("Webhook Attached");
+	    WebhookMessage("Webhook Attached", tonumber(0xffd500));
     end);
 	
 	if Player and Character and Data then
@@ -274,8 +274,9 @@ local function RunScript(Value)
                 if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
                     Autobuy();
                     AutoRoll();
+                    CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Got: " .. "**" .. StandData.Value .. "**" .. "/" .. "**" .. AttributeData.Value .. "**");
+                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
 
                     task.wait(.50);
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
@@ -287,7 +288,8 @@ local function RunScript(Value)
                     Autobuy();
                     AutoRoll();
                     CreateMessage("Got Stand: " .. StandData.Value);
-                    WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
+                    CreateMessage("Got Attribute: " .. AttributeData.Value);
+                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
                   
                     task.wait(.50);
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
