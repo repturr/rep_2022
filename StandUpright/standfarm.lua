@@ -167,7 +167,6 @@ local function AutoRoll()
                     Use(Arrow);
             end;
         end;
-        UsingVariable = false;
 
         while FunctionConnections.AutoRollActive == true do
             task.wait(.25);
