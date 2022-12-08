@@ -87,73 +87,71 @@ local function CreateMessage(Message)
 end;
 
 local function Switch(value)
-    return function(cases)
-        local case = cases[value] or cases.default
-        if case then
-            return case(value)
-        else
-            error(string.format("Unhandled case (%s)", value), 2)
-        end
-    end
+	return function(cases)
+		local case = cases[value] or cases.default
+		if case then
+			return case(value)
+		else
+			error(string.format("Unhandled case (%s)", value), 2)
+		end
+	end
 end
 
 local function WebhookMessage(Message)
-    if Webhook == "" then
-        return;
-    end;
+	if Webhook == "" then
+		return;
+	end;
 
-    local Response = request({
-        Url = Webhook,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = 'application/json'
-        },
-        Body = HTTPService:JSONEncode({
-            ["content"] = "",
-            ["embeds"] = {{
-                ["title"] = "**SUR Stand Farm**",
-                ["description"] = "",
-                ["type"] = "rich",
-                ["color"] = tonumber(0xffffff),
-                ["fields"] = {
-                    {
-                        ["name"] = "Client",
-                        ["value"] = Player.Name,
-                        ["inline"] = true;
-                    },
-                    {
-                        ["name"] = "HWID",
-                        ["value"] = "**DISABLED**",
-                        ["inline"] = true;
-                    },
-                    {
-                        ["name"] = "Container",
-                        ["value"] = Message,
-                        ["inline"] = false;
-                    },
-            }
-            }}
-        })
-    })
+	local Response = request({
+		Url = Webhook,
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = 'application/json'
+		},
+		Body = HTTPService:JSONEncode({
+			["content"] = "",
+			["embeds"] = {{
+				["title"] = "**SUR Stand Farm**",
+				["description"] = "",
+				["type"] = "rich",
+				["color"] = tonumber(0xffffff),
+				["fields"] = {
+					{
+						["name"] = "Client",
+						["value"] = Player.Name,
+						["inline"] = true;
+					},
+					{
+						["name"] = "HWID",
+						["value"] = "**DISABLED**",
+						["inline"] = true;
+					},
+					{
+						["name"] = "Container",
+						["value"] = Message,
+						["inline"] = false;
+					},
+				}
+			}}
+		})
+	})
 end
 
-local StartupSuccess, StartupData = xpcall(function()
-    CreateMessage("SUR Stand Farm: By Repturr")
-    WebhookMessage("Webhook Attached");
+local StartupSuccess, StartupResultData = task.spawn(function()
+	CreateMessage("SUR Stand Farm: By Repturr")
+	WebhookMessage("Webhook Attached");
 
-    if Player and Character and Data then
-        return "Ready";
-    end
+	if Player and Character and Data then
+		return "Ready";
+	end
+end);
 
-    return "NotReady";
-end)
-
-local __Script = Switch(StandData){
-    ["Ready"] = function()
-        CreateMessage("SUR Stand Farm: Script Ready");
-    end,
-    ["NotReady"] = function()
-        Player:Kick("Error");
-    end
+local __Script = Switch(StartupResultData){
+	["Ready"] = function()
+		CreateMessage("SUR Stand Farm: Script Ready");
+	end,
+	["NotReady"] = function()
+		Player:Kick("Error");
+	end
 }
 
