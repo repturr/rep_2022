@@ -279,14 +279,30 @@ local function RunScript(Value)
         end)
 
         task.spawn(function()
+            local UsingTool = ""
+
             while FunctionConnections.AutoRollActive == true do
                 if (StandData.Value == "None") then
                     local _Arrow = GetTool(ArrowType);
 
                     if _Arrow then
+                        if UsingTool ~= "Stand Arrow" then
+                            return;
+                        end
                         Use(_Arrow);
                     end
+                else
+                    local _Roka = GetTool("Rokakaka");
+
+                    if _Roka then
+                        if UsingTool ~= "Rokakaka" then
+                            return;
+                        end
+                        Use(_Roka);
+                    end
                 end
+
+
           end
         end)
          
