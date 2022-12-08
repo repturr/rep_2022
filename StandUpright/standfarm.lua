@@ -12,8 +12,6 @@ local BuyItemInterval = Settings.BuyItemInterval;
 
 local Webhook = Settings.Webhook;
 
-
-
 --++-- Synapse Services --++--
 local request = syn.request;
 
@@ -36,6 +34,12 @@ local Data = Player.Data
 local StandData = Data.Stand
 local AttributeData = Data.Attri
 
+local FunctionConnections = {
+    AutoBuyActive = false;
+    AutoRollActive = false;
+};
+local StartupConfirmed = false;
+
 --++ Game Variables --++--
 local EventBinder = ReplicatedStorage.Events;
 
@@ -44,25 +48,25 @@ local EventBinder = ReplicatedStorage.Events;
 local function GetTool(Tool)
 	if Backpack:FindFirstChild(Tool) then
 		Tool = Backpack[Tool]
-		return Tool
-	end
-	return nil
-end
+		return Tool;
+	end;
+	return nil;
+end;
 
 local function EquipTool(Tool)
 	if not Tool then
-		return
-	end
+		return;
+	end;
 	for _, __Tool in pairs(Character:GetChildren()) do
 		if __Tool:IsA("Tool") then
-			__Tool.Parent = Backpack
-		end
-	end
+			__Tool.Parent = Backpack;
+		end;
+	end;
 
-	Tool.Parent = Character
-end
+	Tool.Parent = Character;
+end;
 
-local function BuyItem(Item)
+local function Buy(Item)
 	local BuyItemEvent = EventBinder.BuyItem;
 	local Options = {
 		["Stand Arrow"] = "Option4",
@@ -71,12 +75,12 @@ local function BuyItem(Item)
 
 	local ItemToBuy = Options[Item];
 	BuyItemEvent:FireServer("MerchantAU", ItemToBuy);
-end
+end;
 
 local function Use(Item)
 	EquipTool(Item);
 	Item:FindFirstChild("Use"):FireServer();
-end
+end;
 
 local function CreateMessage(Message)
 	StarterGui:SetCore("ChatMakeSystemMessage",{
@@ -86,16 +90,96 @@ local function CreateMessage(Message)
 	});
 end;
 
-local function Switch(value)
-	return function(cases)
-		local case = cases[value] or cases.Default
-		if case then
-			return case(value)
-		else
-			error(string.format("Unhandled case (%s)", value), 2)
-		end
-	end
-end
+local function CreateNotification(Message, Duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = "SUR Stand Farm";
+        Text = Message;
+        Duration = Duration;
+    });
+end;
+
+local function Autobuy()
+    FunctionConnections.AutoBuyActive = not FunctionConnections.AutoBuyActive;
+
+    task.spawn(function()
+        while FunctionConnections.AutoBuyActive == true do
+            task.wait(BuyItemInterval);
+            local OwnsArrows = false;
+            local OwnsRokas = false;
+
+            for _, Item in pairs(Backpack:GetChildren()) do
+                if Item:IsA("Tool") then
+                if Item.Name == "Rokakaka" then
+                    OwnsRokas = true;
+                end;
+
+                if Item.Name == "Stand Arrow" then
+                    OwnsArrows = true;
+                end;
+              end;
+            end;
+
+            for _, Item in pairs(Character:GetChildren()) do
+                if Item:IsA("Tool") then
+                    if Item.Name == "Rokakaka" then
+                        OwnsRokas = true
+                    end
+
+                    if Item.Name == "Stand Arrow" then
+                        OwnsArrows = true
+                    end;
+                end;
+            end;
+
+            if OwnsRokas == false then
+                Buy("Rokakaka");
+            end;
+
+            if OwnsArrows == false then
+                if ArrowType ~= "Charged Arrow" then
+                Buy("Stand Arrow");
+                end;
+            end
+        end;
+    end);
+end;
+
+local function AutoRoll()
+    local UsingVariable = false;
+    FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
+
+    task.spawn(function()
+
+        do
+            if (StandData.Value) == "None" then
+                local Arrow = GetTool(ArrowType);
+
+                if (Arrow) then
+                    Use(Arrow);
+                end;
+            end;
+        end;
+        
+        if UsingVariable == true then
+            return;
+        end;
+
+        UsingVariable = true;
+
+        while FunctionConnections.AutoRollActive == true do
+            task.wait();
+            local Roka = GetTool("Rokakaka");
+            local Arrow = GetTool(ArrowType);
+    
+            if Roka and Arrow then
+                Use(Roka);
+                task.wait(2);
+                Use(Arrow);
+            end;
+        end
+    end);
+end;
+
 
 local function WebhookMessage(Message)
 	if Webhook == "" then
@@ -137,19 +221,82 @@ local function WebhookMessage(Message)
 	})
 end
 
-local StartupFunction, StartupReturnedData = pcall(function()
+local StartupCall, StartupReturnedData = pcall(function()
     task.spawn(function()
         CreateMessage("SUR Stand Farm: By Repturr");
 	    WebhookMessage("Webhook Attached");
     end);
 	
 	if Player and Character and Data then
-		return true;
-	end
+     return true;
+	end;
 
     return false;
 end);
 
-if StartupReturnedData == true then
-    CreateMessage("SUR Stand Farm: Script Ready");
+local function RunScript(Value)
+    local Functions = {
+        [true] = function()
+          local WarningNotification = CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
+          task.wait(10);
+          
+          do
+            local Roka = GetTool("Rokakaka");
+
+            if Roka then
+                Use(Roka);
+            elseif not Roka then
+                Buy("Rokakaka");
+                task.wait(.25);
+                Roka = GetTool("Rokakaka");
+                Use(Roka);
+            end;
+          end;
+
+          local Platform = Instance.new("Part", workspace); 
+          Platform.Size = Vector3.new(50, 50, 50);
+          Platform.Anchored = true;
+          Platform.CFrame = Platform.CFrame * CFrame.new(0, -50, 0);
+
+          CreateMessage("SUR Stand Farm: Teleporting to hidden platform");
+          task.wait(1.50);
+
+          Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
+          CreateMessage("SUR Stand Farm: Starting Farm");
+
+          Autobuy();
+          AutoRoll();
+
+          task.spawn(function()
+            if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
+                Autobuy();
+                AutoRoll();
+                CreateMessage("Got Attribute: " .. AttributeData.Value);
+                WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
+                return;
+            end;
+
+            if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
+                Autobuy();
+                AutoRoll();
+                CreateMessage("Got Stand: " .. StandData.Value);
+                WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
+                return;
+            end;
+          end)
+
+
+        end,
+        [false] = function()
+            
+        end,
+    };
+
+    local Success, Error = pcall(function()
+        task.spawn(function()
+            Functions[Value]();
+        end);
+    end)
 end
+
+RunScript(StartupReturnedData)
