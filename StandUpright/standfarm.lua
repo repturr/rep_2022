@@ -149,7 +149,7 @@ local function AutoRoll()
     FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
 
     task.spawn(function()
-
+        task.wait(1);
         do
             if (StandData.Value) == "None" then
                 local Arrow = GetTool(ArrowType);
