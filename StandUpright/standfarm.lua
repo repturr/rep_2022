@@ -93,9 +93,6 @@ local function Use(Item)
 	EquipTool(Item);
 
 	Item:FindFirstChild("Use"):FireServer();
-    repeat task.wait()
-        
-    until Item == nil; 
 end;
 
 
