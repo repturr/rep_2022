@@ -137,7 +137,7 @@ local function WebhookMessage(Message)
 	})
 end
 
-local Startup, StartupReturnedData = pcall(function()
+local StartupFunction, StartupReturnedData = pcall(function()
     task.spawn(function()
         CreateMessage("SUR Stand Farm: By Repturr");
 	    WebhookMessage("Webhook Attached");
@@ -150,6 +150,3 @@ local Startup, StartupReturnedData = pcall(function()
     return false;
 end);
 
-if StartupReturnedData == true then
-    Player:Kick()
-end
