@@ -224,9 +224,10 @@ coroutine.wrap(function()
     end; -- Decrease Quality
 
 	task.wait(7);
-    mousemoverel(0, 0);
+    mousemoveabs(900, 600)  
+    task.wait(1);
     SimulateLeftClick();
-
+    task.wait(2);
 
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
     ChatMessageInstance(Messages.CREDIT_MESSAGE);
