@@ -31,17 +31,41 @@ local HTTPSettings = Settings.HTTPS;
 local HTTPFunctions = {};
 
 local RollSettings = Settings.Roll;
-local RollFunctions = {};
+local RollFunctions = {
+    RollToggledBool = false;
+    RollBusy = false;
+};
+
+--++-- Messages --++--
+local Messages = {
+    EXECUTE_MESSAGE = "Stand Upright Rebooted: Stand Farm";
+    CREDIT_MESSAGE = "Made by Repturr";
+
+    PLATFORM_TELEPORT_MESSAGE = "Teleporting to hidden platform";
+
+    FARM_TOGGLE_MESSAGE = "Stand Farm %s";
+
+    STAND_ATTRIBUTE_MESSAGE = "%s / %s";
+}
+
 
 --++-- Player Variables --++--
 local Player = Players.LocalPlayer;
 local PlayerID = Player.UserId;
 local PlayerHWID = RbxAnalyticsService:GetClientId();
 
+local Backpack = Player.Backpack;
+
+local Character = Player.Character or Player.CharacterAdded:Wait();
+
 local Data = Player.Data;
 
 local PlayerStand = Data.Stand;
 local PlayerAttribute = Data.Attri;
+
+--++ Game Variables --++
+local Events = ReplicatedStorage.Events;
+local BuyEvent = Events.BuyItem;
 
 --++-- Functions --++--
 local function IsLoaded()
@@ -86,11 +110,98 @@ function PerfomanceFunctions.SetQualityLevel(QualityLevel)
     return
 end
 
+function RollFunctions.EquipItem(Item)
+    if not Item then
+		return;
+	end;
+	for _, __Item in pairs(Character:GetChildren()) do
+		if __Item:IsA("Tool") then
+			__Item.Parent = Backpack;
+		end;
+	end;
+
+	Item.Parent = Character;
+end
+
+function RollFunctions.UnequipAll()
+    for _, Item in pairs(Character:GetChildren()) do
+        if Item:IsA("Tool") then
+            Item.Parent = Backpack;
+        end;
+    end;
+end
+
+function RollFunctions.UseItem(Item)
+    RollFunctions.EquipItem(Item);
+    Item:FindFirstChild("Use"):FireServer();
+end
+
+function RollFunctions.BuyItems()
+    BuyEvent:FireServer("MerchantAU", "Option4");
+    BuyEvent:FireServer("MerchantAU", "Option2");
+end
+
+function  RollFunctions.RollToggle()
+    RollFunctions.RollToggledBool = not RollFunctions.RollToggledBool;
+
+    while RollFunctions.RollToggledBool == true do
+        task.wait();
+
+        if (PlayerStand.Value ~= "None") then
+            if RollSettings.Stands[PlayerStand.Value] and RollSettings.Stands[PlayerStand.Value] == true then
+                RollFunctions.RollToggledBool = false;
+
+                ChatMessageInstance(Messages.STAND_ATTRIBUTE_MESSAGE:format(PlayerStand.Value, PlayerAttribute.Value));
+
+                if PerformanceSettings.KickUponRoll == true then
+                    Player:Kick(Messages.STAND_ATTRIBUTE_MESSAGE:format(PlayerStand.Value, PlayerAttribute.Value));
+                end
+
+                break;
+            end;
+
+            if RollSettings.Attibutes[PlayerAttribute.Value] and RollSettings.Attributes[PlayerAttribute.Value] == true then
+                RollFunctions.RollToggledBool = false;
+                ChatMessageInstance(Messages.STAND_ATTRIBUTE_MESSAGE:format(PlayerStand.Value, PlayerAttribute.Value));
+
+                if PerformanceSettings.KickUponRoll == true then
+                    Player:Kick(Messages.STAND_ATTRIBUTE_MESSAGE:format(PlayerStand.Value, PlayerAttribute.Value));
+                end
+
+                break;
+            end;
+
+            RollFunctions.UseItem("Rokakaka");
+        end;
+
+        task.spawn(function()
+            wait(2);
+            RollFunctions.BuyItems();
+        end);
+
+        task.spawn(function()
+            if (PlayerStand.Value ~= "None") then
+                return;
+            end;
+            if RollFunctions.RollBusy == true then
+                return;
+            end
+
+            RollFunctions.RollBusy = true;
+            RollFunctions.UseItem("Stand Arrow");
+            task.wait(2);
+            RollFunctions.UseItem("Rokakaka");
+            task.wait(1);
+            RollFunctions.RollBusy = false;
+        end)
+
+    end;
+end
+
 coroutine.wrap(function()
-    do
+    do -- Decrease Quality
         if (PerformanceSettings.DecreaseQuality) == true then
             PerfomanceFunctions.SetQualityLevel(1);
-            
             local function Check(v)
                 if v:IsA'Part' then
                     v.Material = Enum.Material.Plastic;
@@ -116,6 +227,23 @@ coroutine.wrap(function()
             
             workspace.DescendantAdded:Connect(Check);
         end;
-    end;
+    end; -- Decrease Quality
+
+	repeat task.wait()
+        
+    until IsLoaded() == true;
+    ChatMessageInstance(Messages.EXECUTE_MESSAGE);
+    ChatMessageInstance(Messages.CREDIT_MESSAGE);
+    ChatMessageInstance(Messages.PLATFORM_TELEPORT_MESSAGE);
+    task.wait(3);
+    
+    local Platform = Instance.new("Part", workspace);
+    Platform.CFrame = Platform.CFrame * CFrame.new(0, -100, 0);
+    Platform.Anchored = true;
+
+    Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
+
+    
+
 
 end)()
