@@ -137,7 +137,7 @@ local function WebhookMessage(Message)
 	})
 end
 
-local StartupFunctionAndReturnResult = function()
+local StartupFunctionAndReturnResult = task.spawn(function()
 	CreateMessage("SUR Stand Farm: By Repturr")
 	WebhookMessage("Webhook Attached");
 
@@ -146,9 +146,9 @@ local StartupFunctionAndReturnResult = function()
 	end
 
     return "NotReady";
-end;
+end);
 
-print(StartupFunctionAndReturnResult);
+print(StartupFunctionAndReturnResult());
 
 --[[local __Script = Switch(StartupFunctionAndReturnResult){
 	["Ready"] = function()
