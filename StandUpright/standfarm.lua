@@ -225,7 +225,9 @@ coroutine.wrap(function()
 	task.wait(7);
     mousemoveabs(900, 600)  
     task.wait(1);
-    SimulateLeftClick();
+    for i = 1, 10 do
+        SimulateLeftClick();
+    end
     task.wait(2);
 
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
