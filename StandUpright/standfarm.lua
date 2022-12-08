@@ -149,7 +149,7 @@ function StartupFunctionAndReturnResult()
     return "NotReady";
 end;
 
-print(StartupFunctionAndReturnResult());
+print(StartupFunctionAndReturnResult);
 
 --[[local __Script = Switch(StartupFunctionAndReturnResult){
 	["Ready"] = function()
