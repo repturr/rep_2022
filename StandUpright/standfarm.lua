@@ -195,22 +195,20 @@ function  RollFunctions.RollToggle()
             RollFunctions.BuyItems();
         end);
 
-            if (PlayerStand.Value ~= "None") then
-                return;
-            end;
-            if RollFunctions.RollBusy == true then
-                return;
-            end
-            RollFunctions.UnequipAll();
-            RollFunctions.RollBusy = true;
-            RollFunctions.UseItem("Stand Arrow");
-            task.wait(2);
-            RollFunctions.UseItem("Rokakaka");
-            task.wait(1);
-            RollFunctions.UnequipAll();
-            task.wait(2)
-            RollFunctions.RollBusy = false;
-
+            task.spawn(function()
+                if RollFunctions.RollBusy == true then
+                    return;
+                end
+                RollFunctions.UnequipAll();
+                RollFunctions.RollBusy = true;
+                RollFunctions.UseItem("Stand Arrow");
+                task.wait(2);
+                RollFunctions.UseItem("Rokakaka");
+                task.wait(1);
+                RollFunctions.UnequipAll();
+                task.wait(2)
+                RollFunctions.RollBusy = false;
+            end)
     end;
 end
 
