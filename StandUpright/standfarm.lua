@@ -149,7 +149,7 @@ local Startup, StartupReturnedData = pcall(function()
     return "NotReady";
 end);
 
-print(StartupReturnedData());
+print(StartupReturnedData);
 
 --[[local __Script = Switch(StartupFunctionAndReturnResult){
 	["Ready"] = function()
