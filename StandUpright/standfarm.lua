@@ -137,7 +137,8 @@ local function WebhookMessage(Message)
 	})
 end
 
-local StartupFunctionAndReturnResult = function()
+
+function StartupFunctionAndReturnResult()
 	CreateMessage("SUR Stand Farm: By Repturr")
 	WebhookMessage("Webhook Attached");
 
