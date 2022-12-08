@@ -150,7 +150,7 @@ end);
 
 print(StartupFunctionAndReturnResult);
 
-local __Script = Switch(StartupFunctionAndReturnResult){
+--[[local __Script = Switch(StartupFunctionAndReturnResult){
 	["Ready"] = function()
 		CreateMessage("SUR Stand Farm: Script Ready");
         return true;
@@ -163,5 +163,5 @@ local __Script = Switch(StartupFunctionAndReturnResult){
     ["Default"] = function()
         return false;
     end;
-}
+}--]]
 
