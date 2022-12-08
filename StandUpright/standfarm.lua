@@ -188,7 +188,6 @@ local function RunScript(Value)
             end
           end
 
-          
           local Platform = Instance.new("Part", workspace); 
           Platform.Size = Vector3.new(50, 50, 50);
           Platform.Anchored = true;
@@ -200,8 +199,98 @@ local function RunScript(Value)
           Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
           CreateMessage("SUR Stand Farm: Starting Farm");
 
-            
-          
+          local Arrow = GetTool(ArrowType);
+
+          if Arrow then
+            Use(Arrow);
+          elseif not Arrow then
+            Buy("Stand Arrow");
+            task.wait(.15);
+            Arrow = GetTool("Stand Arrow");
+            Use(Arrow);
+          end;
+
+          task.spawn(function()
+            while task.wait() do
+                if Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true then
+                    FunctionConnections.AutoBuyActive = false;
+                    FunctionConnections.AutoRollActive = false;
+
+                    CreateMessage("SUR Stand Farm: " .. StandData.Value .. "/" .. AttributeData.Value);
+                    WebhookMessage(StandData.Value .. "/" .. AttributeData.Value, tonumber(0x42f551));
+                    return;
+                end
+            end
+          end)
+
+          task.spawn(function()
+            while task.wait() do
+                if Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true then
+                    FunctionConnections.AutoBuyActive = false;
+                    FunctionConnections.AutoRollActive = false;
+
+                    CreateMessage("SUR Stand Farm: " .. StandData.Value .. "/" .. AttributeData.Value);
+                    WebhookMessage(StandData.Value .. "/" .. AttributeData.Value, tonumber(0x42f551));
+                    return;
+                end
+            end
+          end)
+
+        task.spawn(function()
+            while FunctionConnections.AutoBuyActive == true do
+                task.wait(BuyItemInterval);
+                local OwnsArrows = false;
+                local OwnsRokas = false;
+    
+                for _, Item in pairs(Backpack:GetChildren()) do
+                    if Item:IsA("Tool") then
+                    if Item.Name == "Rokakaka" then
+                        OwnsRokas = true;
+                    end;
+    
+                    if Item.Name == "Stand Arrow" then
+                        OwnsArrows = true;
+                    end;
+                  end;
+                end;
+    
+                for _, Item in pairs(Character:GetChildren()) do
+                    if Item:IsA("Tool") then
+                        if Item.Name == "Rokakaka" then
+                            OwnsRokas = true
+                        end
+    
+                        if Item.Name == "Stand Arrow" then
+                            OwnsArrows = true
+                        end;
+                    end;
+                end;
+    
+                if OwnsRokas == false then
+                    Buy("Rokakaka");
+                end;
+    
+                if OwnsArrows == false then
+                    if ArrowType ~= "Charged Arrow" then
+                    Buy("Stand Arrow");
+                    end;
+                end
+            end
+        end)
+
+        task.spawn(function()
+            while FunctionConnections.AutoRollActive == true do
+                if (StandData.Value == "None") then
+                    local _Arrow = GetTool(ArrowType);
+
+                    if _Arrow then
+                        Use(_Arrow);
+                    end
+                end
+          end
+        end)
+         
+        
         end,
         [false] = function()
             
