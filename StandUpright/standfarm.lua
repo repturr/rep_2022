@@ -1,327 +1,146 @@
---++-- If Script is already active don't run again --++--
-if _G.ScriptActive == true then
-	return;
-end;
-_G.ScriptActive = true;
+if Executed == true then
+    return;
+end
+pcall(function() getgenv().Executed = true end)
+
+--++ Services --++--
+local HttpService = game:GetService("HttpService");
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local AnalyticsService = game:GetService("RbxAnalyticsService");
+
+--++ Synapse API Services --++--
+local SimulateLeftClick = mouse1click;
+local SimulateLeftHold = mouse1press;
+local SimulateLeftRelease = mouse1release;
+
+local SimulateRightClick = mouse2click;
+local SimulateRightHold = mouse2press;
+local SimulateRightRelease = mouse2release;
+
+local SetConsoleTitle = rconsolename;
+local ConsolePrint = rconsoleprint;
+local ConsoleClear = rconsoleclear;
+local ConsoleInfo = rconsoleinfo;
+local ConsoleInput = rconsoleinput;
+
+local Request = syn.request;
 
 --++ Script Services --++--
 local Settings = _G.Settings;
 
-local ArrowType = Settings.ArrowType;
-local BuyItemInterval = Settings.BuyItemInterval;
+local PerfomanceSettings = Settings.Perfomace;
+local HTTPSettings = Settings.HTTPSettings;
+local RollableSettings = Settings.Rollable;
 
-local Webhook = Settings.Webhook;
+local RollableStands = RollableSettings.Stands;
+local RolllableAttributes = RollableSettings.Attributes;
 
---++-- Synapse Services --++--
-local request = syn.request;
+local FarmActive = false;
 
---++ Get Services --++--
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
-local StarterGui = game:GetService("StarterGui");
-local Players = game:GetService("Players");
-local HTTPService = game:GetService("HttpService");
-local AnalyticsService = game:GetService("RbxAnalyticsService");
-
---++ Create Variables --++--
+--++-- Player Variables --++--
 local Player = Players.LocalPlayer;
-local PlayerGui = Player.PlayerGui;
+local PlayerHWID = AnalyticsService:GetClientId();
+
+local Data = Player.Data;
+
+local PlayerStand = Data.Stand;
+local PlayerAttribute = Data.Attri;
 
 local Character = Player.Character;
-local Backpack = Player.Backpack;
-
-local Data = Player.Data
-
-local StandData = Data.Stand
-local AttributeData = Data.Attri
-
-local FunctionConnections = {
-    AutoBuyActive = false;
-    AutoRollActive = false;
-};
-local StartupConfirmed = false;
-
---++ Game Variables --++--
-local EventBinder = ReplicatedStorage.Events;
-
 
 --++ Functions --++--
-local function GetTool(Tool)
-	if Backpack:FindFirstChild(Tool) then
-		Tool = Backpack[Tool]
-		return Tool;
-	end;
-	return nil;
-end;
+local function FarmToggle()
+    FarmActive = not FarmActive;
 
-local function EquipTool(Tool)
-	if not Tool then
-		return;
-	end;
-	for _, __Tool in pairs(Character:GetChildren()) do
-		if __Tool:IsA("Tool") then
-			__Tool.Parent = Backpack;
-		end;
-	end;
-
-	Tool.Parent = Character;
-end;
-
-local function UnequipAll()
-    for _, Item in pairs(Character:GetChildren()) do
-        if Item:IsA("Tool") then
-            Item.Parent = Backpack;
-        end;
-    end;
+    ConsolePrint("@@WHITE@@");
+    ConsolePrint("\n------------------------------------------------------");
+    ConsolePrint("\nFarm " .. FarmActive and "Started" or not FarmActive and "Stopped");
 end
 
-local function Buy(Item)
-	local BuyItemEvent = EventBinder.BuyItem;
-	local Options = {
-		["Stand Arrow"] = "Option4",
-		["Rokakaka"] = "Option2"
-	};
+--++-- Wait until Loaded --++--
+coroutine.wrap(function()
+    task.wait(2);
 
-	local ItemToBuy = Options[Item];
-	BuyItemEvent:FireServer("MerchantAU", ItemToBuy);
-end;
-
-local function Use(Item)
-   UnequipAll();
-
-	EquipTool(Item);
-	Item:FindFirstChild("Use"):FireServer();
-end;
-
-local function CreateMessage(Message)
-	StarterGui:SetCore("ChatMakeSystemMessage",{
-		['Text'] = Message,
-		['Color'] = Color3.fromRGB(44, 180, 52),
-		['Font'] = Enum.Font.SourceSansLight
-	});
-end;
-
-local function CreateNotification(Message, Duration)
-    StarterGui:SetCore("SendNotification", {
-        Title = "SUR Stand Farm";
-        Text = Message;
-        Duration = Duration;
-    });
-end;
-
-local function Autobuy()
-    FunctionConnections.AutoBuyActive = not FunctionConnections.AutoBuyActive;
-
-    task.spawn(function()
-        while FunctionConnections.AutoBuyActive == true do
-            task.wait(BuyItemInterval);
-            local OwnsArrows = false;
-            local OwnsRokas = false;
-
-            for _, Item in pairs(Backpack:GetChildren()) do
-                if Item:IsA("Tool") then
-                if Item.Name == "Rokakaka" then
-                    OwnsRokas = true;
-                end;
-
-                if Item.Name == "Stand Arrow" then
-                    OwnsArrows = true;
-                end;
-              end;
-            end;
-
-            for _, Item in pairs(Character:GetChildren()) do
-                if Item:IsA("Tool") then
-                    if Item.Name == "Rokakaka" then
-                        OwnsRokas = true
-                    end
-
-                    if Item.Name == "Stand Arrow" then
-                        OwnsArrows = true
-                    end;
-                end;
-            end;
-
-            if OwnsRokas == false then
-                Buy("Rokakaka");
-            end;
-
-            if OwnsArrows == false then
-                if ArrowType ~= "Charged Arrow" then
-                Buy("Stand Arrow");
-                end;
-            end
-        end;
-    end);
-end;
-
-local function AutoRoll()
-    local UsingVariable = false;
-    FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
-
-        task.wait(1);
-        do
-            if (StandData.Value) == "None" then
-                local Arrow = GetTool(ArrowType);
-
-                if (Arrow) then
-                    Use(Arrow);
-            end;
-        end;
-        UsingVariable = false;
-
-        while FunctionConnections.AutoRollActive == true do
-            task.wait(.25);
-            if UsingVariable == true then
-                return;
-            end;
-
-            local Roka = GetTool("Rokakaka");
-            local Arrow = GetTool(ArrowType);
+    repeat task.wait()
     
-            if Roka and Arrow then
-                UsingVariable = true;
-                Use(Roka);
-                task.wait(2);
-                Use(Arrow);
-                task.wait(1);
-                UsingVariable = false;
-            end;
-        end
-    end;
-end;
-
-
-local function WebhookMessage(Message, Color)
-	if Webhook == "" then
-		return;
-	end;
-
-	local Response = request({
-		Url = Webhook,
-		Method = "POST",
-		Headers = {
-			["Content-Type"] = 'application/json'
-		},
-		Body = HTTPService:JSONEncode({
-			["content"] = "",
-			["embeds"] = {{
-				["title"] = "**SUR Stand Farm**",
-				["description"] = "",
-				["type"] = "rich",
-				["color"] = Color,
-				["fields"] = {
-					{
-						["name"] = "Client",
-						["value"] = Player.Name,
-						["inline"] = true;
-					},
-					{
-						["name"] = "HWID",
-						["value"] = "**DISABLED**",
-						["inline"] = true;
-					},
-					{
-						["name"] = "Container",
-						["value"] = Message,
-						["inline"] = false;
-					},
-				}
-			}}
-		})
-	})
-end
-
-local StartupCall, StartupReturnedData = pcall(function()
-    task.spawn(function()
-        CreateMessage("SUR Stand Farm: By Repturr");
-	    WebhookMessage("Webhook Attached", tonumber(0xffd500));
-    end);
-	
-	if Player and Character and Data then
-     return true;
-	end;
-
-    return false;
-end);
-
-local function RunScript(Value)
-    local Functions = {
-        [true] = function()
-          local WarningNotification = CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
-          task.wait(10);
-          
-          do
-            local Roka = GetTool("Rokakaka");
-
-            if Roka then
-                Use(Roka);
-            elseif not Roka then
-                Buy("Rokakaka");
-                task.wait(.25);
-                Roka = GetTool("Rokakaka");
-                Use(Roka);
-            end;
-          end;
-
-          local Platform = Instance.new("Part", workspace); 
-          Platform.Size = Vector3.new(50, 50, 50);
-          Platform.Anchored = true;
-          Platform.CFrame = Platform.CFrame * CFrame.new(0, -50, 0);
-
-          CreateMessage("SUR Stand Farm: Teleporting to hidden platform");
-          task.wait(1.50);
-
-          Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
-          CreateMessage("SUR Stand Farm: Starting Farm");
-
-          Autobuy();
-          AutoRoll();
-
-          task.spawn(function()
-            while task.wait() do
-                if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
-                    Autobuy();
-                    AutoRoll();
-                    CreateMessage("Got Stand: " .. StandData.Value);
-                    CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
-
-                    if Settings.KickUponRoll == true then
-                        Player:Kick("Requested Kick Upon Roll \n " .. StandData.Value .. "/" .. AttributeData.Value);
-                    end
-
-                    task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
-                    Platform:Destroy();
-                    break;
-                end;
+    until Player.PlayerGui.MenuGUI.Enabled == false;
     
-                if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
-                    Autobuy();
-                    AutoRoll();
-                    CreateMessage("Got Stand: " .. StandData.Value);
-                    CreateMessage("Got Attribute: " .. AttributeData.Value);
-                    WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
-                  
-                    task.wait(.50);
-                    Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
-                    Platform:Destroy();
-                    break;
-                end;
-            end
-          end)
-
-        end,
-        [false] = function()
-            
-        end,
-    };
+    --++-- Create Console --++--
+    SetConsoleTitle("Stand Upright Rebooted: Stand Farm");
+    ConsolePrint("Welcome " .. Player.Name .. " (" .. PlayerHWID ..")");
+    ConsolePrint("\n------------------------------------------------------");
+    ConsolePrint("\nCurrent Stats: " .. PlayerStand.Value .. "/" .. PlayerAttribute.Value);
+    ConsolePrint("\n------------------------------------------------------");
+    ConsolePrint("\nCommands");
+    ConsolePrint("\n------------------------------------------------------");
+    ConsolePrint("\n rstart - Starts the Farm");
+    ConsolePrint("\n rstop - Stops the Farm");
+    ConsolePrint("\n rcmds - Displays the commands");
 
     local Success, Error = pcall(function()
-        task.spawn(function()
-            Functions[Value]();
-        end);
-    end)
-end
+        local Commands = {
+            ["rstart"] = function()
+                if FarmActive == true then
+                    ConsolePrint("@@WHITE@@");
+                    ConsolePrint("\n------------------------------------------------------");
+                    ConsolePrint("\nFarm Already Active");
+                    return;
+                end
 
-RunScript(StartupReturnedData)
+                ConsolePrint("\n------------------------------------------------------");
+                ConsolePrint("\nStand Farm Starting");
+                task.wait(2);
+                ConsolePrint("\n------------------------------------------------------");
+                ConsolePrint("\nActive Stands and Attributes");
+
+                for Stand, Enabled in pairs(RollableStands) do
+                    if (Enabled) == true then
+                        ConsolePrint("@@YELLOW@@");
+                        ConsolePrint("\n" .. Stand);
+                    end
+                end;
+
+                for Attribute, Enabled in pairs(RolllableAttributes) do
+                    ConsolePrint("\n------------------------------------------------------");
+                    if (Enabled) == true then
+                        ConsolePrint("@@CYAN@@");
+                        ConsolePrint("\n" .. Attribute);
+                    end
+                end;
+
+                FarmToggle();
+            end,
+            ["rstop"] = function()
+                if FarmActive == false then
+                    ConsolePrint("@@WHITE@@");
+                    ConsolePrint("\n------------------------------------------------------");
+                    ConsolePrint("\nFarm not Active. Cannot stop");
+                    return;
+                end
+                ConsolePrint("@@WHITE@@");
+                ConsolePrint("\n------------------------------------------------------");
+                ConsolePrint("\nStand Farm Stopping");
+
+            end,
+            ["rcmds"] = function()
+                ConsolePrint("@@WHITE@@");
+                ConsolePrint("\n------------------------------------------------------");
+                ConsolePrint("\nCommands");
+                ConsolePrint("\n------------------------------------------------------");
+                ConsolePrint("\n rstart - Starts the Farm");
+                ConsolePrint("\n rstop - Stops the Farm");
+                ConsolePrint("\n rcmds - Displays the commands");
+            end
+        }
+
+        Player.Chatted:Connect(function(Message)
+             if Commands[Message] then
+                Commands[Message]();
+             end
+        end)
+    end)
+    
+end)()
+
+
