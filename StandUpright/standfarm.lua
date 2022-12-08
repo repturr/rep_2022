@@ -153,7 +153,7 @@ function  RollFunctions.RollToggle()
                 break;
             end;
 
-            if RollSettings.Attibutes[PlayerAttribute.Value] and RollSettings.Attributes[PlayerAttribute.Value] == true then
+            if RollSettings.Attributes[PlayerAttribute.Value] and RollSettings.Attributes[PlayerAttribute.Value] == true then
                 RollFunctions.RollToggledBool = false;
                 ChatMessageInstance(Messages.STAND_ATTRIBUTE_MESSAGE:format(PlayerStand.Value, PlayerAttribute.Value));
 
