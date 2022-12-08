@@ -88,7 +88,7 @@ end;
 
 local function Switch(value)
 	return function(cases)
-		local case = cases[value] or cases.default
+		local case = cases[value] or cases.Default
 		if case then
 			return case(value)
 		else
@@ -152,6 +152,10 @@ local __Script = Switch(StartupResultData){
 	end,
 	["NotReady"] = function()
 		Player:Kick("Error");
-	end
+	end,
+
+    ["Default"] = function()
+        
+    end;
 }
 
