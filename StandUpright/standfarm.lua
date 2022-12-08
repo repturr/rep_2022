@@ -125,7 +125,7 @@ end
 
 function RollFunctions.UseItem(Item)
     local NewItem  = RollFunctions.EquipItem(Item);
-    NewItem:FindFirstChild("Use"):FireServer();
+    NewItem.Use:FireServer();
 end
 
 function RollFunctions.BuyItems()
