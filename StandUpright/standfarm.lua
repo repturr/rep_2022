@@ -176,12 +176,11 @@ local function AutoRoll()
 
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
-            UnequipAll();
     
             if Roka and Arrow then
                 UsingVariable = true;
                 UnequipAll();
-
+                task.wait(.25);
                 Use(Roka);
                 task.wait(2);
                 Use(Arrow);
@@ -283,15 +282,13 @@ local function RunScript(Value)
 		    VirtualUser:ClickButton2(Vector2.new())
 	    end)
 
-          --Autobuy();
+          Autobuy();
           AutoRoll();
-
-          local UsingVariable = false;
 
           task.spawn(function()
             while task.wait() do
                 if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
-                    --Autobuy();
+                    Autobuy();
                     AutoRoll();
                     CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
@@ -305,26 +302,11 @@ local function RunScript(Value)
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
                     Platform:Destroy();
                     break;
-                else
-                    if UsingVariable == false then
-                        local Roka = GetTool("Rokakaka");
-                        local Arrow = GetTool(ArrowType);
-
-                        if Roka and Arrow then
-                        UsingVariable = true;
-                        Use(Roka);
-                        task.wait(2);
-                        Use(Arrow);
-                        task.wait(1);
-                        UnequipAll();
-                        UsingVariable = false;
-                        end
-                    end
                 end;
     
                 if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
                     Autobuy();
-                   -- AutoRoll();
+                    AutoRoll();
                     CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
                     WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
