@@ -189,7 +189,7 @@ local function AutoRoll()
                 UsingVariable = false;
             end;
         end
-    end);
+    end
 end;
 
 
