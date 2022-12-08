@@ -281,16 +281,16 @@ local function RunScript(Value)
 
         task.spawn(function()
             local UsingTool = ""
-            FunctionConnections.AutoRollActive = true;
+            FunctionConnections.AutoBuyActive = true;
             while FunctionConnections.AutoRollActive == true do
                 if (StandData.Value == "None") then
                     local _Arrow = GetTool(ArrowType);
 
                     if _Arrow then
+                        UsingTool = "Stand Arrow";
                         if UsingTool ~= "Stand Arrow" then
                             return;
                         end
-                        UsingTool = "Stand Arrow";
                         Use(_Arrow);
                         task.wait(2);
                         UsingTool = "";
@@ -299,10 +299,10 @@ local function RunScript(Value)
                     local _Roka = GetTool("Rokakaka");
 
                     if _Roka then
+                        UsingTool = "Rokakaka";
                         if UsingTool ~= "Rokakaka" then
                             return;
                         end
-                        UsingTool = "Rokakaka";
                         Use(_Roka);
                         task.wait(1);
                         UsingTool = "";
