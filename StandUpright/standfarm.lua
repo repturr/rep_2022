@@ -255,6 +255,51 @@ local function RunScript(Value)
           end;
 
           AutoBuy();
+
+          local UsingTool = false;
+
+          StandData:GetPropertyChangedSignal("Value"):Connect(function()
+                if Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true then
+                    if Settings.KickUponRoll then
+                        Player:Kick();
+                    end
+                    CreateMessage("Stand: " .. StandData.Value .. "\n" .. "Attribute: " .. AttributeData.Value);
+                    WebhookMessage("Stand: " .. StandData.Value .. "\n" .. "Attribute: " .. AttributeData.Value, tonumber(0xffd500));
+                    AutoBuy();
+                    return;
+                else
+                    while Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == false  do
+                        task.wait();
+
+                        if UsingTool == true then
+                            return;
+                        end
+
+                        local Roka = GetTool("Rokakaka");
+                        local Arrow = GetTool(ArrowType);
+
+                        if Roka and Arrow then
+                            UsingTool = true;
+                            Use(Roka);
+                            task.wait(1);
+                            Use(Arrow);
+                            task.wait(2);
+                            UsingTool = false;
+                        end
+                    end
+                end
+
+                if Settings.Stands[StandData.Value] and Settings.StandData[StandData.Value] == true then
+                    if Settings.KickUponRoll then
+                        Player:Kick();
+                    end
+                    CreateMessage("Stand: " .. StandData.Value .. "\n" .. "Attribute: " .. AttributeData.Value);
+                    WebhookMessage("Stand: " .. StandData.Value .. "\n" .. "Attribute: " .. AttributeData.Value, tonumber(0xffd500));
+                    AutoBuy();
+                    return;
+                end
+
+          end)
          
         end,
         [false] = function()
