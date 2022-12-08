@@ -137,8 +137,8 @@ local function WebhookMessage(Message)
 	})
 end
 
+local Startup, StartupReturnedData = pcall(function()
 
-function StartupFunctionAndReturnResult()
 	CreateMessage("SUR Stand Farm: By Repturr")
 	WebhookMessage("Webhook Attached");
 
@@ -147,9 +147,9 @@ function StartupFunctionAndReturnResult()
 	end
 
     return "NotReady";
-end;
+end);
 
-print(StartupFunctionAndReturnResult);
+print(StartupReturnedData());
 
 --[[local __Script = Switch(StartupFunctionAndReturnResult){
 	["Ready"] = function()
