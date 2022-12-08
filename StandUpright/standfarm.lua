@@ -16,6 +16,7 @@ local Webhook = Settings.Webhook;
 local request = syn.request;
 
 --++ Get Services --++--
+local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local StarterGui = game:GetService("StarterGui");
 local Players = game:GetService("Players");
@@ -88,11 +89,21 @@ local function Buy(Item)
 end;
 
 local function Use(Item)
-   UnequipAll();
+    UnequipAll();
 
+    CollectionService:AddTag(Item, "Using");
 	EquipTool(Item);
 	Item:FindFirstChild("Use"):FireServer();
 end;
+
+local function WaitUntilItemIsUsed(Item, Callback)
+    if CollectionService:HasTag(Item, "Using") then
+        repeat
+            
+        until not Item.Parent;
+        Callback();
+    end
+end
 
 local function CreateMessage(Message)
 	StarterGui:SetCore("ChatMakeSystemMessage",{
@@ -185,10 +196,11 @@ local function AutoRoll()
                 UnequipAll();
                 task.wait(.25);
                 Use(Roka);
-                task.wait(2);
-                Use(Arrow);
-                task.wait(1);
-                UnequipAll();
+                WaitUntilItemIsUsed(Roka, function()
+                    Use(Arrow);
+                    task.wait(1);
+                    UnequipAll();
+                end);
             end;
         end;
     end;
