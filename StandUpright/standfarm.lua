@@ -209,7 +209,7 @@ function  RollFunctions.RollToggle()
                 task.wait(2)
                 RollFunctions.RollBusy = false;
             end)
-    end;
+    end);
 end
 
 coroutine.wrap(function()
@@ -266,6 +266,6 @@ coroutine.wrap(function()
 
     RollFunctions.UseItem("Rokakaka");
 
-    task.wait(2;
+    task.wait(2);
     RollFunctions.RollToggle();
 end)()
