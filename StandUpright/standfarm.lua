@@ -289,7 +289,10 @@ local function RunScript(Value)
                         if UsingTool ~= "Stand Arrow" then
                             return;
                         end
+                        UsingTool = "Stand Arrow";
                         Use(_Arrow);
+                        task.wait(2);
+                        UsingTool = "";
                     end
                 else
                     local _Roka = GetTool("Rokakaka");
@@ -298,7 +301,10 @@ local function RunScript(Value)
                         if UsingTool ~= "Rokakaka" then
                             return;
                         end
+                        UsingTool = "Rokakaka";
                         Use(_Roka);
+                        task.wait(1);
+                        UsingTool = "";
                     end
                 end
 
