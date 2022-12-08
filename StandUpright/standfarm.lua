@@ -221,12 +221,10 @@ coroutine.wrap(function()
         end;
     end; -- Decrease Quality
 
-	task.wait(7);
-    mousemoveabs(900, 600)  
-    task.wait(1);
-    for i = 1, 10 do
-        SimulateLeftClick();
-    end
+	task.wait(8);
+    for i,v in pairs(getconnections(Player.PlayerGui.MenuGUI.Play.MouseButton1Click)) do
+        v:Fire()
+     end
     task.wait(2);
 
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
