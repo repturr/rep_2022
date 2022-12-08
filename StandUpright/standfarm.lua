@@ -90,10 +90,12 @@ end;
 
 local function Use(Item)
     UnequipAll();
-
-    CollectionService:AddTag(Item, "Using");
 	EquipTool(Item);
+
 	Item:FindFirstChild("Use"):FireServer();
+    repeat task.wait()
+        
+    until Item == nil; 
 end;
 
 
@@ -161,36 +163,20 @@ end;
 
 local function AutoRoll()
     FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
-
-        task.wait(1);
-        do
-            if (StandData.Value) == "None" then
-                local Arrow = GetTool(ArrowType);
-
-                if (Arrow) then
-                    Use(Arrow);
-            end;
-        end;
-
-        while FunctionConnections.AutoRollActive == true and FunctionConnections.AutoRollInUse == false do
-            task.wait();
-            if FunctionConnections.AutoRollUsingItem == true or FunctionConnections.AutoRollInUse == true then
-                return;
-            end;
-            FunctionConnections.AutoRollInUse = true;
-           
-
-            local Roka = GetTool("Rokakaka");
-            local Arrow = GetTool(ArrowType);
     
-            if Roka and Arrow then
-                FunctionConnections.AutoRollUsingItem  = true;
-                UnequipAll();
-                task.wait(.25);
-                Use(Roka);
-            end;
-        end;
-    end;
+    while FunctionConnections.AutoRollActive == true do
+        task.wait();
+
+        local Roka = GetTool("Rokakaka");
+        local Arrow = GetTool(ArrowType);
+
+        UnequipAll();
+
+        if Roka and Arrow then
+             Use(Roka);
+             Use(Arrow);
+        end
+    end
 end;
 
 
