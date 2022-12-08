@@ -285,6 +285,10 @@ local function RunScript(Value)
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
                     WebhookMessage("Stats: "  .. StandData.Value  .. "/" ..  AttributeData.Value,  tonumber(0x40ff00));
 
+                    if Settings.KickUponRoll == true then
+                        Player:Kick("Requested Kick Upon Roll \n " .. StandData.Value .. "/" .. AttributeData.Value);
+                    end
+
                     task.wait(.50);
                     Character.HumanoidRootPart.Position = Vector3.new(-361.177, 23.5808, -300.008);
                     Platform:Destroy();
