@@ -174,8 +174,23 @@ end);
 local function RunScript(Value)
     local Functions = {
         [true] = function()
-          CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
-          task.wait(10);
+          if (StandData.Value ~= "None") then
+            CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
+            task.wait(10);
+
+            local Roka = GetTool("Rokakaka");
+
+            if Roka then
+                Use(Roka);
+            elseif not Roka then
+                Buy("Rokakaka");
+                task.wait(.15);
+
+                Use(Roka);
+            end
+          end
+
+          
           
           local Platform = Instance.new("Part", workspace); 
           Platform.Size = Vector3.new(50, 50, 50);
@@ -188,7 +203,7 @@ local function RunScript(Value)
           Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
           CreateMessage("SUR Stand Farm: Starting Farm");
 
-        
+            
           
         end,
         [false] = function()
