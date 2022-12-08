@@ -239,7 +239,4 @@ coroutine.wrap(function()
 
     task.wait(1);
     RollFunctions.RollToggle();
-    
-
-
 end)()
