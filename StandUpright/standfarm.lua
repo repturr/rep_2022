@@ -1,5 +1,3 @@
-task.wait(10);
-
 --++-- Game Services --++--
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
