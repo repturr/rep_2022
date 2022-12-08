@@ -169,7 +169,7 @@ local function AutoRoll()
             end;
         end;
 
-        while FunctionConnections.AutoRollActive == true do
+        while FunctionConnections.AutoRollActive == true and FunctionConnections.AutoRollInUse == false do
             task.wait();
             if FunctionConnections.AutoRollUsingItem == true or FunctionConnections.AutoRollInUse == true then
                 return;
@@ -189,9 +189,6 @@ local function AutoRoll()
                 Use(Arrow);
                 task.wait(1);
                 UnequipAll();
-                task.wait(1);
-                FunctionConnections.AutoRollUsingItem  = false;
-                FunctionConnections.AutoRollInUse = false;
             end;
         end;
     end;
