@@ -1,3 +1,5 @@
+task.wait(10);
+
 --++-- Game Services --++--
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -50,24 +52,14 @@ local Messages = {
 
 
 --++-- Player Variables --++--
-task.wait(5);
-
 local Player = Players.LocalPlayer;
 local PlayerHWID = RbxAnalyticsService:GetClientId();
 
-print("Check 1")
-
 local Backpack = Player.Backpack;
-
-print("Check 2")
 
 local Character = Player.Character or Player.CharacterAdded:Wait();
 
-print("Check 3")
-
 local Data = Player.Data;
-
-print("Check 4")
 
 local PlayerStand = Data.Stand;
 local PlayerAttribute = Data.Attri;
