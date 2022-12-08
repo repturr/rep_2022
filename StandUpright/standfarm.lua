@@ -268,23 +268,25 @@ local function RunScript(Value)
           AutoRoll();
 
           task.spawn(function()
-            if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
-                Autobuy();
-                AutoRoll();
-                CreateMessage("Got Attribute: " .. AttributeData.Value);
-                WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
-                return;
-            end;
-
-            if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
-                Autobuy();
-                AutoRoll();
-                CreateMessage("Got Stand: " .. StandData.Value);
-                WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
-                return;
-            end;
+            while task.wait() do
+                if (Settings.Attributes[AttributeData.Value] and Settings.Attributes[AttributeData.Value] == true) then
+                    Autobuy();
+                    AutoRoll();
+                    CreateMessage("Got Attribute: " .. AttributeData.Value);
+                    WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
+                    break;
+                end;
+    
+                if (Settings.Stands[StandData.Value] and Settings.Stands[StandData.Value] == true) then
+                    Autobuy();
+                    AutoRoll();
+                    CreateMessage("Got Stand: " .. StandData.Value);
+                    WebhookMessage("Got: " .. StandData.Value .. "/" .. AttributeData.Value);
+                    break;
+                    
+                end;
+            end
           end)
-
 
         end,
         [false] = function()
