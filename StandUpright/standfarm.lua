@@ -237,7 +237,7 @@ local function RunScript(Value)
           local WarningNotification = CreateNotification("Warning this will ROKA your current stand in 10 seconds \n " .. StandData.Value .. " / " .. AttributeData.Value);
           task.wait(10);
           
-          do
+          task.spawn(function()
             local Roka = GetTool("Rokakaka");
 
             if Roka then
@@ -248,21 +248,18 @@ local function RunScript(Value)
                 Roka = GetTool("Rokakaka");
                 Use(Roka);
             end;
-          end;
+          end)
+            
 
-          print("Check 1")
-
+          
           local Platform = Instance.new("Part", workspace); 
           Platform.Size = Vector3.new(50, 50, 50);
           Platform.Anchored = true;
           Platform.CFrame = Platform.CFrame * CFrame.new(0, -50, 0);
 
-          print("Check 2")
-
           CreateMessage("SUR Stand Farm: Teleporting to hidden platform");
           task.wait(1.50);
 
-          print("Check 3")
           Character.HumanoidRootPart.CFrame = Platform.CFrame * CFrame.new(0, 5, 0);
           CreateMessage("SUR Stand Farm: Starting Farm");
 
