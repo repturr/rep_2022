@@ -68,12 +68,6 @@ local Events = ReplicatedStorage.Events;
 local BuyEvent = Events.BuyItem;
 
 --++-- Functions --++--
-local function IsLoaded()
-    if Player.PlayerGui.MainGUI.Enabled == true then
-        return false;
-    end
-    return true;
-end
 local function ChatMessageInstance(Message)
 	StarterGui:SetCore("ChatMakeSystemMessage",{
 		['Text'] = Message,
@@ -231,7 +225,7 @@ coroutine.wrap(function()
 
 	repeat task.wait()
         
-    until IsLoaded() == true;
+    until Player.PlayerGui.MainGUI.Enabled == false;
     ChatMessageInstance(Messages.EXECUTE_MESSAGE);
     ChatMessageInstance(Messages.CREDIT_MESSAGE);
     ChatMessageInstance(Messages.PLATFORM_TELEPORT_MESSAGE);
