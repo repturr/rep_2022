@@ -50,7 +50,7 @@ local Messages = {
 
 
 --++-- Player Variables --++--
-task.wait(2);
+task.wait(5);
 
 local Player = Players.LocalPlayer;
 local PlayerHWID = RbxAnalyticsService:GetClientId();
