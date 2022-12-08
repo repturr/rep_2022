@@ -159,7 +159,7 @@ local function Autobuy()
         end;
 end;
 
-local function AutoRoll()
+--[[local function AutoRoll()
     FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
     
     while FunctionConnections.AutoRollActive == true do
@@ -175,7 +175,7 @@ local function AutoRoll()
              Use(Arrow);
         end
     end
-end;
+end;--]]
 
 
 local function WebhookMessage(Message, Color)
@@ -274,7 +274,7 @@ local function RunScript(Value)
         end)
 
         task.spawn(function()
-            AutoRoll();
+        --    AutoRoll();
         end)
           
           
@@ -287,7 +287,7 @@ local function RunScript(Value)
                     end)
             
                     task.spawn(function()
-                        AutoRoll();
+                      --  AutoRoll();
                     end)
                     CreateMessage("Got Stand: " .. StandData.Value);
                     CreateMessage("Got Attribute: " .. AttributeData.Value);
