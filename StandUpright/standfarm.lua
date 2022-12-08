@@ -51,7 +51,6 @@ local Messages = {
 
 --++-- Player Variables --++--
 local Player = Players.LocalPlayer;
-local PlayerID = Player.UserId;
 local PlayerHWID = RbxAnalyticsService:GetClientId();
 
 local Backpack = Player.Backpack;
