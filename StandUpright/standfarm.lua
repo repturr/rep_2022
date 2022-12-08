@@ -66,6 +66,14 @@ local function EquipTool(Tool)
 	Tool.Parent = Character;
 end;
 
+local function UnequipAll()
+    for _, Item in pairs(Character:GetChildren()) do
+        if Item:IsA("Tool") then
+            Item.Parent = Backpack;
+        end;
+    end;
+end
+
 local function Buy(Item)
 	local BuyItemEvent = EventBinder.BuyItem;
 	local Options = {
@@ -78,11 +86,7 @@ local function Buy(Item)
 end;
 
 local function Use(Item)
-    for _, Item in pairs(Character:GetChildren()) do
-        if Item:IsA("Tool") then
-            Item.Parent = Backpack;
-        end;
-    end;
+   UnequipAll();
 
 	EquipTool(Item);
 	Item:FindFirstChild("Use"):FireServer();
@@ -154,7 +158,6 @@ local function AutoRoll()
     local UsingVariable = false;
     FunctionConnections.AutoRollActive = not FunctionConnections.AutoRollActive;
 
-    task.spawn(function()
         task.wait(1);
         do
             if (StandData.Value) == "None" then
@@ -162,10 +165,8 @@ local function AutoRoll()
 
                 if (Arrow) then
                     Use(Arrow);
-                end;
             end;
         end;
-        
         UsingVariable = false;
 
         while FunctionConnections.AutoRollActive == true do
@@ -179,8 +180,10 @@ local function AutoRoll()
     
             if Roka and Arrow then
                 UsingVariable = true;
+                UnequipAll();
                 Use(Roka);
                 task.wait(2);
+                UnequipAll();
                 Use(Arrow);
                 task.wait(1);
                 UsingVariable = false;
