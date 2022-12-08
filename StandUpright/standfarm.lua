@@ -177,15 +177,13 @@ local function AutoRoll()
 
             local Roka = GetTool("Rokakaka");
             local Arrow = GetTool(ArrowType);
+            UnequipAll();
     
             if Roka and Arrow then
                 UsingVariable = true;
-                UnequipAll();
-                task.wait(.5);
+                
                 Use(Roka);
                 task.wait(2);
-                UnequipAll();
-                task.wait(.5);
                 Use(Arrow);
                 task.wait(1);
                 UsingVariable = false;
