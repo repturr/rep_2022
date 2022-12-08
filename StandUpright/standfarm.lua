@@ -96,14 +96,6 @@ local function Use(Item)
 	Item:FindFirstChild("Use"):FireServer();
 end;
 
-local function WaitUntilItemIsUsed(Item, Callback)
-    if CollectionService:HasTag(Item, "Using") then
-        repeat task.wait();
-            
-        until not Item.Parent;
-        Callback();
-    end
-end
 
 local function CreateMessage(Message)
 	StarterGui:SetCore("ChatMakeSystemMessage",{
@@ -196,11 +188,6 @@ local function AutoRoll()
                 UnequipAll();
                 task.wait(.25);
                 Use(Roka);
-                WaitUntilItemIsUsed(Roka, function()
-                    Use(Arrow);
-                    task.wait(1);
-                    UnequipAll();
-                end);
             end;
         end;
     end;
